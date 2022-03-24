@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+body .container {
+  margin-top: 10px;
+}
+
+body .container__header__title {
+  text-align: center;
+}
+
+body .container__content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 40px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+body .container__content__table {
+  margin: 40px 0;
+  width: 80%;
+}
+
+body .container__content__table thead {
+  font-weight: 600;
+}
+
+body .container__content__table tbody tr:nth-child(odd) {
+  background-color: lightgray;
+}
+
+body .container__content__table td {
+  width: 33%;
+  text-align: center;
+  padding: 5px 10px;
+}
+
+body .button {
+  font-family: 'Open Sans', sans-serif;
+  border: 1px solid black;
+  border-radius: 5%;
+}
+
+body .button--primary {
+  padding: 5px 10px;
+  font-weight: 600;
+}
+
+body .button--secondary {
+  padding: 2px 5px;
+  margin: 0 5px;
+}
+
+body .input__text {
+  height: 23px;
+}
+/*# sourceMappingURL=style.css.map */
