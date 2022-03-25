@@ -37,6 +37,16 @@ body{
 
                 thead{
                     font-weight: 600;
+
+                    &::after{
+                        content: "";
+                        position: relative;
+                        display: block;
+                        height: 1px;
+                        width: 300%;
+                        background-color: black;
+                        bottom: 2px;
+                    }
                 }
 
                 tbody{

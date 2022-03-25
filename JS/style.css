@@ -46,6 +46,16 @@ body .container__content__table thead {
   font-weight: 600;
 }
 
+body .container__content__table thead::after {
+  content: "";
+  position: relative;
+  display: block;
+  height: 1px;
+  width: 300%;
+  background-color: black;
+  bottom: 2px;
+}
+
 body .container__content__table tbody tr:nth-child(odd) {
   background-color: lightgray;
 }
