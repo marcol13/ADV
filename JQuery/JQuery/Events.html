@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>jQuery</title>
+    <script
+      type="text/javascript"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+    ></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("button").bind("asdf", function () {
+          $(this).text("The cake is a lie!");
+        });
+        function edit() {
+          $("button").trigger("asdf");
+          let input = $(document.createElement("input"))
+            .attr("id", "edit")
+            .attr("value", $(this).text());
+          $(this).replaceWith(input);
+          $("#edit").focus();
+
+          $("#edit").blur(function () {
+            let td = $(document.createElement("td")).text($(this).val());
+            $(this).replaceWith(td);
+            $("td").one("click", edit);
+          });
+        }
+
+        $("td").one("click", edit);
+      });
+    </script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>One</td>
+      </tr>
+      <tr>
+        <td>Two</td>
+      </tr>
+      <tr>
+        <td>Three</td>
+      </tr>
+      <tr>
+        <td>...</td>
+      </tr>
+    </table>
+    <button>coś tam</button>
+  </body>
+</html>

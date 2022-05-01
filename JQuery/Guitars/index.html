@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guitars</title>
+  </head>
+  <style>
+      body{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+      table{
+            width: 50%;
+      }
+      td{
+        border: 1px solid black;
+      }
+  </style>
+  <script>
+    function insertTable(data) {
+      const td = document.querySelectorAll("td");
+      let i = 0;
+      for (el of data) {
+        td[i].innerHTML = el.Brand;
+        td[i + 1].innerHTML = el.Model;
+        i += 2;
+      }
+    }
+
+    fetch("http://localhost:5005/guitars")
+      .then((response) => response.json())
+      .then((data) => data.Guitars.Guitar)
+      .then((data) => insertTable(data))
+      .catch(console.log("Błąd"));
+  </script>
+  <body>
+    <table>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </body>
+</html>
