@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Radio+Canada:wght@400;600;700&display=swap");
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Radio Canada", sans-serif;
+}
+
+.title--bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 10px;
+}
+
+.card--image {
+  width: 13rem;
+}
+
+.card--add-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content{
+    margin: 0 10px 20px;
+}
+
+.content__items{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+footer{
+    position: sticky;
+    top: 100%;
+}
+
+.wrapper{
+  margin: 0 15px;
+}
+
+.cart--content{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 30px;
+  min-height: 500px;
+  margin-bottom: 20px;
+}
+
+.cart--content h4{
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.cart--content .details{
+  border-right: 2px dashed black;
+}
+
+.user-data form .row{
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.user-data form button{
+  width: 125px;
+}

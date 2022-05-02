@@ -1,0 +1,15 @@
+<%- include('./components/header-cart.ejs') %>
+<div class="cart--content">
+  <div class="details">
+    <h4>Podsumowanie</h4>
+    <% if(myCart.length > 0){ %>
+    <p>Mam coś w koszyku</p>
+    <% }else{ %>
+    <p>Nie mam nic w koszyku</p>
+    <% } %>
+  </div>
+  <div class="user-data">
+    <h4>Dane do wysyłki</h4>
+    <%- include('./components/form.ejs') %>
+  </div>
+</div>
