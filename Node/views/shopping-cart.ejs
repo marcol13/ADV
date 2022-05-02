@@ -2,11 +2,29 @@
 <div class="cart--content">
   <div class="details">
     <h4>Podsumowanie</h4>
-    <% if(myCart.length > 0){ %>
-    <p>Mam coś w koszyku</p>
-    <% }else{ %>
-    <p>Nie mam nic w koszyku</p>
-    <% } %>
+    <div class="details__content">
+      <% if(myCart.length > 0){ %>
+      <ol>
+        <li>
+          <span>Nr.</span>
+          <span>Ilość</span>
+          <span>Nazwa</span>
+          <span>Cena</span>
+        </li>
+        <% let sum = 0 %> <% myCart.forEach((el) => { %> <% sum += el.amount *
+        el.price %>
+        <li class="count">
+          <span><%= el.amount %>x</span>
+          <span><%= el.item %></span>
+          <span><%= el.amount * el.price %></span>
+        </li>
+        <% }); %>
+      </ol>
+      <p>RAZEM: <%= sum %></p>
+      <% }else{ %>
+      <p>Nie mam nic w koszyku</p>
+      <% } %>
+    </div>
   </div>
   <div class="user-data">
     <h4>Dane do wysyłki</h4>

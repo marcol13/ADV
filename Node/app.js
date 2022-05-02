@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.get("/shopping-cart", (req, res) => {
   res.render("shopping-cart", {
-    myCart: [{ item: "Gitara", amount: 3, price: 500 }],
+    myCart: [{ item: "Gitara", amount: 3, price: 500 }, {item: "Ukulele", amount: 4, price: 200}],
   });
 });
 
