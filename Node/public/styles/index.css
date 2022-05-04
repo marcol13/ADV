@@ -21,8 +21,20 @@ html {
   margin: 20px 10px;
 }
 
+.item--card{
+  height: 100%;
+}
+
+.card-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .card--image {
   width: 13rem;
+  height: 200px;
+  object-fit: contain;
 }
 
 .card--add-panel {

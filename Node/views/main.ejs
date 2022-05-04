@@ -1,7 +1,60 @@
 <%- include('./components/header.ejs') %>
 <div class="content content__items">
-  <%- include("./components/card.ejs") %> <%- include("./components/card.ejs")
+  <% shopItems.forEach((el) => { %>
+    <div class="card item--card text-center" style="width: 15.5rem">
+      <div class="card-body col-6-sm">
+        <h4 class="card-title"><%= el.name %></h4>
+        <h6 class="card-subtitle"><%= el.price %>zł</h6>
+        <img
+          class="card--image"
+          src=<%= "images/" + el.image %>
+        />
+        <p class="card-text"><%= el.amount %> szt.</p>
+        <% if(el.amount > 0) { %>
+        <div class="card--add-panel">
+          <div class="form-outline">
+            <input type="number" id="typeNumber<%= el.id %>" min=0 max= <%= el.amount %> class="form-control" placeholder="Ilość" />
+          </div>
+          <button class="btn" id=<%= el.id %>>
+            <img src="assets/icons/shopping-cart-add.png"/>
+          </button>
+        </div>
+        <% } else{ %>
+          <p>Produkt niedostępny</p>
+        <% } %>
+      </div>
+    </div>
+  <% }) %>
+  <script>
+    const buttons = document.querySelectorAll(".btn")
+    buttons.forEach((el) => {
+      el.addEventListener('click', function(){
+        try{
+          let input = document.querySelector(`#typeNumber${this.id}`)
+          let object = {
+            item: parseInt(this.id),
+            amount: parseInt(input.value)
+          }
+          console.log({object})
+          fetch("http://localhost:8003/add",{
+            method: "POST",
+            body: JSON.stringify(object),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          }).then(res => {
+            if(res.status === 200){alert(`Dodano do koszyka`)}
+            console.log(res)
+          })
+        }catch{
+          console.log("nie działa")
+        }
+        
+      })
+    })
+  </script>
+  <!-- <%- include("./components/card.ejs") %> <%- include("./components/card.ejs")
   %> <%- include("./components/card.ejs") %> <%-
   include("./components/card.ejs") %> <%- include("./components/card.ejs") %>
-  <%- include("./components/card.ejs") %>
+  <%- include("./components/card.ejs") %> -->
 </div>

@@ -11,12 +11,12 @@
           <span>Nazwa</span>
           <span>Cena</span>
         </li>
-        <% let sum = 0 %> <% myCart.forEach((el) => { %> <% sum += el.amount *
+        <% let sum = 0 %> <% myCart.forEach((el) => { %> <% sum += el.requested*
         el.price %>
         <li class="count">
-          <span><%= el.amount %>x</span>
-          <span><%= el.item %></span>
-          <span><%= el.amount * el.price %></span>
+          <span><%= el.requested %>x</span>
+          <span><%= el.name %></span>
+          <span><%= el.requested* el.price %></span>
         </li>
         <% }); %>
       </ol>
@@ -31,3 +31,13 @@
     <%- include('./components/form.ejs') %>
   </div>
 </div>
+
+<script>
+  const button = document.querySelector("#buy")
+  button.addEventListener("click", () => {
+    fetch("http://localhost:8003/buy",{
+      method: "POST",
+      body: {}
+    })
+  })
+</script>
