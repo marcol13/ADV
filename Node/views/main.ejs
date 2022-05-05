@@ -35,7 +35,7 @@
             item: parseInt(this.id),
             amount: parseInt(input.value)
           }
-          console.log({object})
+          if(object.amount < 1) throw new Error()
           fetch("http://localhost:8003/add",{
             method: "POST",
             body: JSON.stringify(object),

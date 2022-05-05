@@ -122,3 +122,11 @@ footer {
 .details__content li.count::before {
   content: counter(section) ". ";
 }
+
+.unavailable{
+  color: darkgrey;
+}
+
+.btn:disabled{
+  background-color: darkgrey !important;
+}

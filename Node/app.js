@@ -69,20 +69,70 @@ async function db_all_main() {
 
 app.get("/", async (req, res) => {
   try {
-    await db_all_main();
+    req.session.shopItems = await db_all_main();
   } catch (error) {
+    req.session.shopItems = [];
     shopItems = [];
   }
-  res.render("main", { shopItems: shopItems });
+  res.render("main", { shopItems: req.session.shopItems });
 });
 
-app.get("/shopping-cart", (req, res) => {
-  if (!req.session.shoppingCart) {
-    req.session.shoppingCart = [];
-  }
-  res.render("shopping-cart", {
-    myCart: req.session.shoppingCart,
+function checkIsAvailable(cart) {
+  let result = [];
+  cart.forEach((el, index) => {
+    const sql = "SELECT amount FROM instruments WHERE id=?";
+    db.all(sql, [el.id], (err, rows) => {
+      if (err) return;
+
+      if (rows.length < 1) return;
+
+      el.amount = rows[0].amount;
+      if (el.requested > el.amount) el.isAvailable = false;
+      console.log(el);
+      result.push(el);
+      if (index == cart.length - 1) return result;
+    });
   });
+}
+
+app.get("/shopping-cart", (req, res) => {
+  let canBuy = true;
+  if (!req.session.shoppingCart || req.session.shoppingCart.length < 1) {
+    req.session.shoppingCart = [];
+    res.render("shopping-cart", {
+      myCart: req.session.shoppingCart,
+      canBuy: canBuy,
+    });
+  } else {
+    console.log("abc");
+    // req.session.shoppingCart = checkIsAvailable(req.session.shoppingCart);
+    req.session.shoppingCart.forEach((el, index) => {
+      const sql = "SELECT amount FROM instruments WHERE id=?";
+      db.all(sql, [el.id], (err, rows) => {
+        if (err) return;
+
+        if (rows.length < 1) return;
+
+        el.amount = rows[0].amount;
+        if (el.requested > el.amount) {
+          el.isAvailable = false;
+          canBuy = false;
+        }
+
+        if (index == req.session.shoppingCart.length - 1) {
+          res.render("shopping-cart", {
+            myCart: req.session.shoppingCart,
+            canBuy: canBuy,
+          });
+        }
+      });
+    });
+  }
+  // console.log(`siema ${req.session.shoppingCart}`);
+  // res.render("shopping-cart", {
+  //   myCart: req.session.shoppingCart,
+  //   canBuy: canBuy,
+  // });
 });
 
 app.post("/add", (req, res) => {
@@ -110,6 +160,7 @@ app.post("/add", (req, res) => {
             price: data.price,
             amount: data.amount,
             requested: req.body.amount,
+            isAvailable: true,
           });
         } else {
           req.session.shoppingCart = [
@@ -119,6 +170,7 @@ app.post("/add", (req, res) => {
               price: data.price,
               amount: data.amount,
               requested: req.body.amount,
+              isAvailable: true,
             },
           ];
         }
@@ -134,8 +186,41 @@ app.post("/add", (req, res) => {
   }
 });
 
+function inStock(cart) {
+  let sql = "";
+  cart.forEach((el) => {
+    sql = "SELECT amount FROM instruments WHERE id=?";
+    db.all(sql, [el.id], (err, rows) => {
+      if (err) return false;
+
+      if (rows.length < 1) return false;
+
+      let data = rows[0].amount;
+
+      if (data < cart.requested) {
+        return false;
+      }
+    });
+  });
+  return true;
+}
+
 app.post("/buy", (req, res) => {
-  console.log(req.body);
+  const cart = req.session.shoppingCart;
+  if (inStock(cart)) {
+    db.run("BEGIN TRANSACTION");
+    cart.forEach((el, index) => {
+      const sql = "UPDATE instruments SET amount = amount - ? WHERE id=?";
+      db.run(sql, [el.requested, el.id], (err, rows) => {
+        if (err) res.status(400).send({ status: 400, success: false });
+        if (index == cart.length - 1) {
+          db.run("COMMIT;");
+          req.session.shoppingCart = [];
+          res.status(200).send({ status: 200, success: true });
+        }
+      });
+    });
+  }
 });
 
 app.listen(port);

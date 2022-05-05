@@ -13,7 +13,9 @@
         </li>
         <% let sum = 0 %> <% myCart.forEach((el) => { %> <% sum += el.requested*
         el.price %>
-        <li class="count">
+        <li class="count <% if(!el.isAvailable) { %>
+          unavailable
+          <% } %>">
           <span><%= el.requested %>x</span>
           <span><%= el.name %></span>
           <span><%= el.requested* el.price %></span>
@@ -33,11 +35,12 @@
 </div>
 
 <script>
-  const button = document.querySelector("#buy")
-  button.addEventListener("click", () => {
-    fetch("http://localhost:8003/buy",{
-      method: "POST",
-      body: {}
-    })
-  })
+  const button = document.querySelector("#buy");
+  button.addEventListener("click", function(e){
+    e.preventDefault();
+    if(!this.disabled)
+      fetch("http://localhost:8003/buy", {
+        method: "POST",
+      }).then(alert("Dokonano zakupu")).then(window.location.href = "./")
+  });
 </script>

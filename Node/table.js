@@ -11,11 +11,29 @@ const db = new sqlite.Database(
 // const sql = `CREATE TABLE instruments(id INTEGER PRIMARY KEY, name, price, image, amount)`;
 
 //INSERT
-const sql = `INSERT INTO instruments(name, price, image, amount) VALUES(?,?,?,?)`;
+// const sql = `INSERT INTO instruments(name, price, image, amount) VALUES(?,?,?,?)`;
 
-db.run(sql, [
-  "Kazoo metalowe",
-  16,
-  "metalowe_kazoo.jpg",
-  0,
-]);
+// db.run(sql, [
+//   "Klarnet Arnolds&Sons",
+//   1409,
+//   "klarnet_arnolds&sons.jpg",
+//   5,
+// ]);
+
+
+//UPDATE
+// const sql = `UPDATE instruments SET amount = ? WHERE id = ?`
+
+// db.run(sql, [5, 6])
+
+//SELECT
+// const sql = `SELECT * FROM instruments`
+
+// db.all(sql, (err, rows) => {
+//   console.log(rows)
+// })
+
+//DELETE
+const sql = `DELETE FROM instruments WHERE id=?`
+
+db.run(sql, [7])
