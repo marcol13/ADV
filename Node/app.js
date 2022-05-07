@@ -186,6 +186,18 @@ app.post("/add", (req, res) => {
   }
 });
 
+app.post("/clear", (req, res) => {
+  req.session.shoppingCart = [];
+  res.status(200).send({ status: 200, success: true });
+});
+
+app.post("/clear/:id", (req,res) => {
+  req.session.shoppingCart = req.session.shoppingCart.filter((el) => {
+    return el.id != req.params.id
+  })
+  res.status(200).send({ status: 200, success: true });
+})
+
 function inStock(cart) {
   let sql = "";
   cart.forEach((el) => {

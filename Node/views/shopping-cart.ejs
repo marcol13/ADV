@@ -10,6 +10,7 @@
           <span>Ilość</span>
           <span>Nazwa</span>
           <span>Cena</span>
+          <span></span>
         </li>
         <% let sum = 0 %> <% myCart.forEach((el) => { %> <% sum += el.requested*
         el.price %>
@@ -19,10 +20,12 @@
           <span><%= el.requested %>x</span>
           <span><%= el.name %></span>
           <span><%= el.requested* el.price %></span>
+          <span><button class="trash-can" id=<%= el.id %>><img src="assets/icons/trash-can.png"/></button></span>
         </li>
         <% }); %>
       </ol>
       <p>RAZEM: <%= sum %></p>
+      <button class="btn btn-primary" id="clear-cart">Wyczyść koszyk</button>
       <% }else{ %>
       <p>Nie mam nic w koszyku</p>
       <% } %>
@@ -43,4 +46,21 @@
         method: "POST",
       }).then(alert("Dokonano zakupu")).then(window.location.href = "./")
   });
+
+  const clearBtn = document.querySelector("#clear-cart");
+  clearBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    fetch("http://localhost:8003/clear", {
+      method: "POST"
+    }).then(alert("Wyczyszczono koszyk")).then(window.location.href = "./")
+  })
+
+  const trashCanBtn = document.querySelectorAll(".trash-can");
+  trashCanBtn.forEach((el) => {
+    el.addEventListener("click", function(){
+      fetch(`http://localhost:8003/clear/${this.id}`, {
+        method: "POST"
+      }).then(alert("Usunięto pozycję z koszyka")).then(window.location.reload())
+    })
+  })
 </script>
