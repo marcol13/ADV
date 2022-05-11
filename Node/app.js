@@ -191,35 +191,133 @@ app.post("/clear", (req, res) => {
   res.status(200).send({ status: 200, success: true });
 });
 
-app.post("/clear/:id", (req,res) => {
+app.post("/clear/:id", (req, res) => {
   req.session.shoppingCart = req.session.shoppingCart.filter((el) => {
-    return el.id != req.params.id
-  })
+    return el.id != req.params.id;
+  });
   res.status(200).send({ status: 200, success: true });
-})
+});
+
+async function db_in_stock(cart) {
+  return new Promise(function (resolve, reject) {
+    const id_numbers = cart.map((el) => el.id);
+    console.log(id_numbers);
+    const sql =
+      "SELECT amount FROM instruments WHERE id IN ( " +
+      cart.map(() => "?").join(",") +
+      " )";
+      console.log({sql})
+    db.all(sql, id_numbers, (err, rows) => {
+      if (err) {
+        // return false;
+        console.log({err, pies: 1})
+        reject([false]);
+      }
+
+      if (rows.length < 1) {
+        // return false;
+        console.log({rows})
+        reject([false]);
+      }
+
+      for (let j = 0; j < rows.length; j++) {
+        let data = rows[j].amount;
+
+        console.log(data, cart[j].requested);
+
+        if (data < cart[j].requested) {
+          // return false;
+          reject([false]);
+        }
+      }
+      console.log("Wszystko jest ok");
+      // return true;
+      resolve([true]);
+
+      // resolve(rows);
+    });
+  });
+}
 
 function inStock(cart) {
   let sql = "";
-  cart.forEach((el) => {
-    sql = "SELECT amount FROM instruments WHERE id=?";
-    db.all(sql, [el.id], (err, rows) => {
-      if (err) return false;
+  const id_numbers = cart.map((el) => el.id);
+  console.log(id_numbers);
 
-      if (rows.length < 1) return false;
+  sql =
+    "SELECT amount FROM instruments WHERE id IN ( " +
+    cart.map(() => "?").join(",") +
+    " )";
+  console.log(sql);
+  db.all(sql, [id_numbers], (err, rows) => {
+    if (err) return false;
 
-      let data = rows[0].amount;
+    if (rows.length < 1) return false;
 
-      if (data < cart.requested) {
+    for (let j = 0; j < rows.length; j++) {
+      let data = rows[j].amount;
+
+      console.log(data, cart[j].requested);
+
+      if (data < cart[j].requested) {
         return false;
       }
-    });
-  });
-  return true;
-}
+    }
+    console.log("Wszystko jest ok");
+    return true;
 
-app.post("/buy", (req, res) => {
+    // let data = rows[0].amount;
+
+    // console.log(data, cart[i].requested);
+
+    // if (data < cart[i].requested) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+  });
+}
+// cart.forEach((el) => {
+//   sql = "SELECT amount FROM instruments WHERE id=?";
+//   db.all(sql, [el.id], (err, rows) => {
+//     if (err) return false;
+
+//     if (rows.length < 1) return false;
+
+//     let data = rows[0].amount;
+
+//     console.log(data, el.requested)
+
+//     if (data < el.requested) {
+//       return false;
+//     }
+//   });
+// });
+// return true;
+
+app.post("/buy", async (req, res) => {
   const cart = req.session.shoppingCart;
-  if (inStock(cart)) {
+  console.log({ cart });
+  let flag = undefined;
+  try {
+    await db_in_stock(cart);
+    // console.log({ promise });
+    flag = true;
+  } catch (err) {
+    console.log({ err, pies: 2 });
+    flag = false;
+  }
+  // .then((res) => {
+  //   flag = res;
+  //   console.log("resolve");
+  // })
+  // .catch((err) => {
+  //   flag = false;
+  //   console.log("reject");
+  // });
+  console.log({ flag });
+  if (flag) {
+    console.log("Jest tego dużo");
     db.run("BEGIN TRANSACTION");
     cart.forEach((el, index) => {
       const sql = "UPDATE instruments SET amount = amount - ? WHERE id=?";
@@ -232,6 +330,9 @@ app.post("/buy", (req, res) => {
         }
       });
     });
+  } else {
+    console.log("Nie ma już takich produktów");
+    res.status(400).send({ status: 400, success: false });
   }
 });
 

@@ -41,19 +41,35 @@
   const button = document.querySelector("#buy");
   button.addEventListener("click", function(e){
     e.preventDefault();
-    if(!this.disabled)
-      fetch("http://localhost:8003/buy", {
+    if(!this.disabled){
+      let temp = fetch("http://localhost:8003/buy", {
         method: "POST",
-      }).then(alert("Dokonano zakupu")).then(window.location.href = "./")
+      }).then((res) => {
+        if(res.status === 200){
+          alert("Dokonano zakupu")
+          return true
+        }else{
+          alert("Nie można dokonać zakupu")
+          return false
+        }}).then((res) => {
+          if(res) window.location.href = "./"
+          else window.location.reload()})
+      .catch(() => {
+        alert("Nie można dokonać zakupu")
+      })
+      console.log(temp)
+    }
+      
   });
 
   const clearBtn = document.querySelector("#clear-cart");
-  clearBtn.addEventListener("click", function(e){
-    e.preventDefault();
-    fetch("http://localhost:8003/clear", {
-      method: "POST"
-    }).then(alert("Wyczyszczono koszyk")).then(window.location.href = "./")
-  })
+  if(clearBtn)
+    clearBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      fetch("http://localhost:8003/clear", {
+        method: "POST"
+      }).then(alert("Wyczyszczono koszyk")).then(window.location.href = "./")
+    })
 
   const trashCanBtn = document.querySelectorAll(".trash-can");
   trashCanBtn.forEach((el) => {

@@ -21,10 +21,10 @@ const db = new sqlite.Database(
 // ]);
 
 
-//UPDATE
-// const sql = `UPDATE instruments SET amount = ? WHERE id = ?`
+// UPDATE
+const sql = `UPDATE instruments SET amount = ? WHERE id = ?`
 
-// db.run(sql, [5, 6])
+db.run(sql, [5, 6])
 
 //SELECT
 // const sql = `SELECT * FROM instruments`
@@ -34,6 +34,6 @@ const db = new sqlite.Database(
 // })
 
 //DELETE
-const sql = `DELETE FROM instruments WHERE id=?`
+// const sql = `DELETE FROM instruments WHERE id=?`
 
-db.run(sql, [7])
+// db.run(sql, [7])
