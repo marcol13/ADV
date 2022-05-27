@@ -1,0 +1,49 @@
+1. What are the responsibilities of each layer of the MVC architecture and how are they
+connected?
+
+Model - all of data in our project - state, information and business rules.
+View - UI site of our application. It displays data in user-friendly way.
+Controllers - Layer between Model and View - it handles browser requests, retrieve model data and call view templates that return a response. Generally controllers are responsible for interaction between user and database.
+
+2. What are the naming conventions for models, controllers, controller actions, views folders
+and views themselves?
+
+Controllers - name must end with "Controller" and should be keep in ./Controllers directory.
+	Controller actions - controller action name
+
+Models - should be singular name and similar to database table title. Should be keep in ./Models directory. 
+
+Views - each view should corresponding to each controller.
+	View folder - should be named exactly like controller but without "Controller" suffix
+ 	View - action name
+
+3. How to pass data from controllers to views (2 options)?
+
+	1. Through the ViewData dictionary
+	2. Through passing model to view
+
+4. How to map URL’s to controller actions?
+
+It is declared in MapControllerRoute.pattern - default: hostname/controller/action?parameters
+
+5. How to restrict controller actions to be executed only via certain HTTP request types (e.g.,
+only via POST)?
+
+We need to put [HttpPost] before method declaration.
+
+6. How to make sure a controller action can only be called through a form on our website and
+not through some external request?
+
+[ValidateAntiForgeryToken] in controller's method and the same name in form's attribute - "asp-action"
+
+7. Where do you define data validation and how do you ensure it in views and controllers?
+
+Validation should be done in model by giving DataAnnotations restrictions
+
+You ensure validation in view by:
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+And in contoller by ModelState.IsValid  
